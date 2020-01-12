@@ -1,21 +1,20 @@
 var mongoose = require('mongoose')
   , db = require('../lib/database')
-  , Tx = require('../models/tx')  
-  , Address = require('../models/address')  
+  , Tx = require('../models/tx')
+  , Address = require('../models/address')
   , settings = require('../lib/settings');
 
 
 var COUNT = 5000; //number of blocks to index
 
-function exit() {  
+function exit() {
   mongoose.disconnect();
   process.exit(0);
 }
 
-var dbString = 'mongodb://' + settings.dbsettings.user;
+var dbString = 'mongodb+srv://' + settings.dbsettings.user;
 dbString = dbString + ':' + settings.dbsettings.password;
 dbString = dbString + '@' + settings.dbsettings.address;
-dbString = dbString + ':' + settings.dbsettings.port;
 dbString = dbString + "/IQUIDUS-BENCHMARK";
 
 mongoose.connect(dbString, function(err) {
@@ -24,8 +23,8 @@ mongoose.connect(dbString, function(err) {
     console.log('Aborting');
     exit();
   }
-  Tx.remove({}, function(err) { 
-    Address.remove({}, function(err2) { 
+  Tx.remove({}, function(err) {
+    Address.remove({}, function(err2) {
       var s_timer = new Date().getTime();
       db.update_tx_db(settings.coin, 1, COUNT, settings.update_timeout, function(){
         var e_timer = new Date().getTime();
